@@ -7,7 +7,12 @@ extractBundlesFromImage () {
 
     echo "== Extracting bundles from image ${_image} =="
 
-    ${_DOCKER_OR_PODMAN} pull --tls-verify=false --platform linux/x86_64 "$image"
+    if [[ $_DOCKER_OR_PODMAN == "podman" ]]; then
+        ${_DOCKER_OR_PODMAN} pull --tls-verify=false --platform linux/x86_64 "$image"
+    else
+        ${_DOCKER_OR_PODMAN} pull --platform linux/x86_64 "$image"
+    fi
+
     ${_DOCKER_OR_PODMAN} save "$image" --output temp.tar
     mkdir -p temp
     tar -xf temp.tar -C temp/
